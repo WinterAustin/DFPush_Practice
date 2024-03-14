@@ -1,0 +1,25 @@
+name: Push Docker Image to Registry
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on pushes to the main branch
+    # paths:
+    #   - 'Dockerfile'  # Optionally, restrict triggering to changes in Dockerfile
+
+jobs:
+  push_to_registry:
+    runs-on: ubuntu-latest  # Use Ubuntu as the runner for the job
+    
+    steps:
+      - name: Checkout code  # Checkout the code from the repository
+        uses: actions/checkout@v2
+        
+      - name: Login to Docker Hub  # Log in to Docker Hub using username and password
+        run: echo "${{ secrets.Kappasigma3 }}" | docker login -u "${{ secrets.winteraustin089 }}" --password-stdin
+        
+      - name: Build Docker image  # Build the Docker image using the Dockerfile
+        run: docker build -t username/repository:tag .
+        
+      - name: Push Docker image to registry  # Push the Docker image to Docker Hub
+        run: docker push username/repository:tag
